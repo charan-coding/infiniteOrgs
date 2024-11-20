@@ -44,16 +44,16 @@ The Fabric test network is used to deploy and run this sample. Follow these step
 1. Deploy one of the smart contract implementations (from the `test-network` folder).
    ```
    # To deploy the TypeScript chaincode implementation
-   ./network.sh deployCC -ccn basic -ccp ../agro-supply-chain/chaincode-typescript/ -ccl typescript
+   ./network.sh deployCC -ccn basic -ccp ../hyperacess/chaincode-typescript/ -ccl typescript
 
    # To deploy the Go chaincode implementation
-   ./network.sh deployCC -ccn basic -ccp ../agro-supply-chain/chaincode-go/ -ccl go
+   ./network.sh deployCC -ccn basic -ccp ../hyperacess/chaincode-go/ -ccl go
 
    # To deploy the Java chaincode implementation
-   ./network.sh deployCC -ccn basic -ccp ../agro-supply-chain/chaincode-java/ -ccl java
+   ./network.sh deployCC -ccn basic -ccp ../hyperacess/chaincode-java/ -ccl java
    ```
 
-1. Run the application (from the `agro-supply-chain` folder).
+1. Run the application (from the `hyperacess` folder).
    ```
    # To run the Typescript sample application
    cd application-gateway-typescript

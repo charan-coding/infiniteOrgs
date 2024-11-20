@@ -11,7 +11,7 @@ const stringify  = require('json-stringify-deterministic');
 const sortKeysRecursive  = require('sort-keys-recursive');
 const { Contract } = require('fabric-contract-api');
 const { create } = require('domain');
-class ASCTP extends Contract {
+class HYPER extends Contract {
 
     async initLedger(ctx){
         await ctx.stub.putState("test","hello world");
@@ -128,4 +128,4 @@ class ASCTP extends Contract {
 
 }
 
-module.exports = ASCTP;
+module.exports = HYPER;

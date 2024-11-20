@@ -6,7 +6,7 @@
 
 'use strict';
 
-const asctp = require('./lib/asctp');
+const hyper = require('./lib/hyper');
 
-module.exports.ASCTP = asctp;
-module.exports.contracts = [asctp];
+module.exports.HYPER = hyper;
+module.exports.contracts = [hyper];

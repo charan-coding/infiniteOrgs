@@ -32,7 +32,7 @@ router.post('/', async (req, res) => {
         const network = await gateway.getNetwork('mychannel');
 
         // Get the contract from the network.
-        const contract = network.getContract('asctp');
+        const contract = network.getContract('hyper');
         const { v4: uuidv4 } = require('uuid');
         const Contract_id = uuidv4();
         

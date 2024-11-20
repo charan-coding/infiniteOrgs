@@ -25,13 +25,13 @@ export CORE_PEER_MSPCONFIGPATH=${PWD}/organizations/peerOrganizations/org5.examp
 export CORE_PEER_ADDRESS=localhost:15051
 
 echo -e "${PURPLE}Install chaincode on Peers of Org5${NC}"
-peer lifecycle chaincode install asctp.tar.gz
+peer lifecycle chaincode install hyper.tar.gz
 
 
 
 export CC_PACKAGE_ID=$(peer lifecycle chaincode queryinstalled | grep -oP '(?<=Package ID: ).*?(?=,)' | tr -d '\n')
-peer lifecycle chaincode approveformyorg -o localhost:7050 --ordererTLSHostnameOverride orderer.example.com --tls --cafile "${PWD}/organizations/ordererOrganizations/example.com/orderers/orderer.example.com/msp/tlscacerts/tlsca.example.com-cert.pem" --channelID mychannel --name asctp --version 1.0 --package-id $CC_PACKAGE_ID --sequence 1
-peer lifecycle chaincode querycommitted --channelID mychannel --name asctp
+peer lifecycle chaincode approveformyorg -o localhost:7050 --ordererTLSHostnameOverride orderer.example.com --tls --cafile "${PWD}/organizations/ordererOrganizations/example.com/orderers/orderer.example.com/msp/tlscacerts/tlsca.example.com-cert.pem" --channelID mychannel --name hyper --version 1.0 --package-id $CC_PACKAGE_ID --sequence 1
+peer lifecycle chaincode querycommitted --channelID mychannel --name hyper
 
 
 # # Step 4: Navigate back to my-fabric-app

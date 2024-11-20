@@ -31,7 +31,7 @@ router.post('/', async (req, res) => {
     const network = await gateway.getNetwork('mychannel');
 
     // Get the contract from the network.
-    const contract = network.getContract('asctp');
+    const contract = network.getContract('hyper');
 
     // Evaluate the specified transaction with the provided farmbag_id.
     const contract_id = req.body.contract_id;
