@@ -47,8 +47,17 @@ setGlobals() {
     export CORE_PEER_TLS_ROOTCERT_FILE=$PEER0_ORG3_CA
     export CORE_PEER_MSPCONFIGPATH=${TEST_NETWORK_HOME}/organizations/peerOrganizations/org3.example.com/users/Admin@org3.example.com/msp
     export CORE_PEER_ADDRESS=localhost:11051
+
   else
-    errorln "ORG Unknown"
+    # Dynamically load environment variables for new organizations
+    local CONFIG_FILE="${TEST_NETWORK_HOME}/scripts/envVar_org${USING_ORG}.conf"
+    if [ -f "$CONFIG_FILE" ]; then
+      infoln "Loading environment variables for dynamic organization org${USING_ORG}"
+      . $CONFIG_FILE
+    else
+      errorln "Org Unknown"
+      exit 1
+    fi
   fi
 
   if [ "$VERBOSE" = "true" ]; then

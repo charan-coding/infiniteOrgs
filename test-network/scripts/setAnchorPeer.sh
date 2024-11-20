@@ -21,19 +21,8 @@ createAnchorPeerUpdate() {
   fetchChannelConfig $ORG $CHANNEL_NAME ${TEST_NETWORK_HOME}/channel-artifacts/${CORE_PEER_LOCALMSPID}config.json
 
   infoln "Generating anchor peer update transaction for Org${ORG} on channel $CHANNEL_NAME"
-
-  if [ $ORG -eq 1 ]; then
-    HOST="peer0.org1.example.com"
-    PORT=7051
-  elif [ $ORG -eq 2 ]; then
-    HOST="peer0.org2.example.com"
-    PORT=9051
-  elif [ $ORG -eq 3 ]; then
-    HOST="peer0.org3.example.com"
-    PORT=11051
-  else
-    errorln "Org${ORG} unknown"
-  fi
+  HOST="peer0.org{$ORG}.example.com"
+  PORT=$(echo $CORE_PEER_ADDRESS | cut -d':' -f2)
 
   set -x
   # Modify the configuration to append the anchor peer 
