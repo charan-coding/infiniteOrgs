@@ -16,14 +16,14 @@ We need to use the latest 2.4.1 release as this contains some improvements to ma
 
 ## End-to-end with the the test-network
 
-The `test-network` and some of the chaincodes have been updated to support running chaincode-as-a-service. The commands below assume that you've got the latest fabric-samples cloned, along with the latest Fabric docker images.
+The `test-network` and some of the chaincodes have been updated to support running chaincode-as-a-service. The commands below assume that you've got the latest infinite_org cloned, along with the latest Fabric docker images.
 
 It's useful to have two terminal windows open, one for starting the Fabric Network, and a second for monitoring all the docker containers.
 
 In your 'monitoring' window, run this to watch all activity from the all the docker containers on the `fabric_test` network; this will monitor all the docker containers that are added to the `fabric-test` network. The network is usually created by the `./network.sh up` command, so remember to delay running this until at least the network is created. It is possible to precreate the network with `docker network create fabric-test` if you wish.
 
 ```bash
-# from the fabric-samples repo
+# from the infinite_org repo
 ./test-network/monitordocker.sh
 ```
 

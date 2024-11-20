@@ -1,5 +1,5 @@
 repository:
-  name: fabric-samples
+  name: infinite_org
   description: Samples for Hyperledger Fabric
   homepage: https://wiki.hyperledger.org/display/fabric
   default_branch: main
