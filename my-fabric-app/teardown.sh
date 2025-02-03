@@ -12,4 +12,7 @@ cd ../test-network
 echo -e "${GREEN}Tearing down the network...${NC}"
 ./network.sh down
 
+./orgDown.sh 4
+./orgDown.sh 5
+
 echo -e "${GREEN}Network teardown completed successfully.${NC}"

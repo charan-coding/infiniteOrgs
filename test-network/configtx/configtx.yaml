@@ -159,13 +159,13 @@ Application: &ApplicationDefaults
       Rule: "ANY Writers"
     Admins:
       Type: ImplicitMeta
-      Rule: "ANY Admins"
+      Rule: "MAJORITY Admins"
     LifecycleEndorsement:
       Type: ImplicitMeta
-      Rule: "ANY Endorsement"
+      Rule: "MAJORITY Endorsement"
     Endorsement:
       Type: ImplicitMeta
-      Rule: "ANY Endorsement"
+      Rule: "MAJORITY Endorsement"
   Capabilities:
     <<: *ApplicationCapabilities
 ################################################################################
@@ -212,7 +212,7 @@ Orderer: &OrdererDefaults
       Rule: "ANY Writers"
     Admins:
       Type: ImplicitMeta
-      Rule: "ANY Admins"
+      Rule: "MAJORITY Admins"
     # BlockValidation specifies what signatures must be included in the block
     # from the orderer for the peer to validate it.
     BlockValidation:
