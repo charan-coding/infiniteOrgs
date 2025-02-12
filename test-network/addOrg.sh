@@ -8,12 +8,13 @@ COUCH_DB_PORT=$4
 
 if [ -z "$ORG_NUM" ] || [ -z "$PEER_PORT" ] || [ -z "$CA_PORT" ] || [ -z "$COUCH_DB_PORT" ]; then
   echo "Usage: $0 <org_number> <peer_port> <ca_port> <couch_db_port>"
-  echo "Example: $0 4 12051 12054 10984"
+  echo "Example: $0 4 13051 13054 11984"
   exit 1
 fi
 
 
 ORG_NAME="org${ORG_NUM}"
+EQUALNUMBER="ORG=${ORG_NUM}"
 ORG_NAME_CAPITALIZED="Org${ORG_NUM}"
 ORG_NAME_UPPERCASE="ORG${ORG_NUM}"
 COUCH_DB_NAME="couchdb$((ORG_NUM + 1))"
@@ -48,6 +49,7 @@ find "$TARGET_FOLDER" -type f -exec sed -i \
   -e "s/ORG3/$ORG_NAME_UPPERCASE/g" \
   -e "s/11051/$PEER_PORT/g" \
   -e "s/11054/$CA_PORT/g" \
+  -e "s/ORG=3/$EQUALNUMBER/g" \
   -e "s/9984/$COUCH_DB_PORT/g" \
   -e "s/couchdb4/$COUCH_DB_NAME/g" {} +
 

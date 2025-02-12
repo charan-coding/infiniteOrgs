@@ -46,6 +46,15 @@ app.use('/api/signContractOrg4', signContractOrg4Router);
 const getContract_org4Router = require('./src/routes/getContract_org4');
 app.use('/api/getContract_org4', getContract_org4Router);
 
+const createEmptyContract_org5Router = require('./src/routes/createEmptyContract_org5');
+app.use('/api/createEmptyContract_org5', createEmptyContract_org5Router);
+
+const signContractOrg5Router = require('./src/routes/signContract_org5');
+app.use('/api/signContractOrg5', signContractOrg5Router);
+
+const getContract_org5Router = require('./src/routes/getContract_org5');
+app.use('/api/getContract_org5', getContract_org5Router);
+
 app.listen(port, () => {
   console.log(`Server running at http://localhost:${port}`);
 });

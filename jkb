@@ -1,0 +1,99 @@
+[33m043d53f[m[33m ([m[1;36mHEAD[m[33m -> [m[1;32mdevelop[m[33m, [m[1;31morigin/main[m[33m)[m test
+[33mc597576[m gitignore for org 4 and 5
+[33ma59a09d[m path fixes
+[33me0133c7[m Renamed and removed org4 and org5 crypto material
+[33md9a6171[m Add infitnie org with any not majority
+[33m30b6186[m[33m ([m[1;31mupstream/main[m[33m, [m[1;31mupstream/HEAD[m[33m)[m Update maintainers
+[33mdd94aae[m Update chaincode container versions in k8s samples
+[33m8136eb4[m Update test-network chaincode container versions
+[33m9b199d4[m Add private data go application
+[33me23bc67[m Simplify Java client error-handling example
+[33m51e3a53[m Remove cli from podman compose file
+[33mf16e9e6[m Consistent Go version in go.mod and go.work files
+[33mb931df3[m Explicitly specify hash in client applications
+[33me37e991[m Update applications to use fabric-gateway v1.6.0
+[33m137f365[m Bump ubuntu to 22.04 in CI
+[33mce5aa88[m test-network-k8s: Improve prereqs logic
+[33m5c5e98b[m Fix the default chaincode version to "1.0" in test-network
+[33m3826626[m Configure dependabot updates to GitHub Actions
+[33m50b69f6[m Add document about how to benchmark the performance using Hyperledger Caliper (#1238)
+[33m604a0a5[m Fix directory path for chaincode-external
+[33m110e732[m Update Go chaincode to fabric-contract-api-go/v2
+[33m7258b4f[m Add JavaScript asset-transfer-basic application
+[33m76088d0[m Remove legacy sample applications
+[33me334b75[m Bump fabric to v2.5.9
+[33mc077dae[m Update TypeScript implementations
+[33ma4f0a2c[m Change CA ports in test-network-nano-bash
+[33m3622a5e[m Add chaincode logging for binary chaincode in test-network-nano-bash
+[33m29e6951[m Use more specific chaincode package versions
+[33m179bc96[m Add external builders for golang and node chaincode to test-network-nano-bash
+[33me4af8fe[m test-network-k8s: bump k8s-builder and couchdb
+[33m0ed3458[m Update Node chaincode for v2.5.5 release
+[33m3c63eac[m Add CA capability to test-network-nano-bash
+[33m92f028c[m Bump dependencies
+[33m1058f9f[m Update test-network-k8s
+[33md3e2a90[m Update test dependencies for Java chaincode
+[33mbf61094[m Remove double quotes for env variables
+[33meffe8ff[m Switch microfab to hyperledger-labs version (#1203)
+[33m2fa83c9[m GHA: Use ubuntu-20.04 for local forks
+[33m4763bca[m test-network error message if jq not installed
+[33m0db6448[m Update nano test network
+[33m42b9b60[m Update Go gRPC dependency
+[33mc691cf9[m Refactor test-network post-decoupling fabric-tools image
+[33m8203685[m test-network envVar.sh script improvement
+[33md4ce4cf[m Update asset-transfer-sbe/chaincode-java
+[33m02bcb44[m Fix docs and scripts for asset-transfer-basic as an external service
+[33mebbc419[m Decouple fabric tools image from fabric sample (#1186)
+[33m66c9992[m Add Go chaincode for asset-transfer-events
+[33ma5eea8c[m Read first client cert from cert directory
+[33mdb86460[m Use latest v2.5 fabric-chaincode-java
+[33m6dc2fa4[m Update GitHub action versions
+[33ma708af9[m add optional extra arguments to lifecycle commands for more flexibility
+[33m02d9f8c[m add support for docker compose v2 (fix #730) fix bugs in #1140
+[33mcdb126d[m add support for docker compose v2 (fix #730) (#1140)
+[33m07e7ee4[m test-network: Update comments to reflect channel profile name changes (#1146)
+[33mce6e519[m Use Executor in asset-transfer-events/application-gateway-java
+[33mc0a0104[m Fix test-network chaincode-as-a-service deployment
+[33m0f4f62c[m Use fabric-gateway v1.4
+[33me73bb71[m Add chaincode utilities
+[33m99a1f49[m add token sdk sample application
+[33m62f304a[m Update AssetTransfer.java
+[33m23dc50c[m FSAT: Update ansible playbooks for compatibility with K8s v1.25.x
+[33mf4f3201[m FSAT: Update fabric-operator for compatibility with v1.25.x
+[33md07bac3[m Bump versions of software used in CI tests to latest
+[33mbda72ca[m Move publishing of REST sample Image from AZP to GHA
+[33m98f7481[m add a retry to the test-network ccaas chaincode init command
+[33m9441772[m updated help message for CFSSL
+[33me63c7d5[m cfssl to generating certificates
+[33m6e71f63[m Fixes for build breakages
+[33m30f70f6[m Update TypeScript HSM sample application
+[33mf2c1c59[m Fix OrdererEndpoints in test-network's bft sample
+[33m7d5aaf1[m Improve BFT sample on test-network (#1083)
+[33meb16caf[m Fix test-network to work with BFT consensus. Added a new option for creating channel: Running ./network.sh createChannel -bft will initiate a channel running BFT orderers. Using ./network.sh up -bft will initiate dockers for bft environment. Added option for 4 orderers.
+[33ma6d8f44[m minor documentation fixes smart contract dev
+[33m5870033[m spanish translation smart contract dev
+[33m9ee0aac[m fix typo in high-througput/README.md (#1073)
+[33mc04253d[m fix(test-network): ignore the error output when killing CCAAS containers (#1063)
+[33m7671bdd[m Update token_contract.go, checking the input params > 0 in function sub().
+[33m9a4920d[m Update token_contract.go, modify the overflow judgment condition for function sub().
+[33mbc3a6bf[m Fix typo (#1048)
+[33m2c0fe75[m Minor improvements on test-network-nano-bash
+[33mbb98f1e[m FSAT: Extend sleep time to stabilize integration test
+[33mae9e7e8[m test-network-nano-bash chaincode id and waitForEvent improvements (#1052)
+[33m81390fb[m Fix nano-bash-bft sample to work with channel-participation. remove dependency on deprecated system-channel.
+[33m20009ec[m Update token_contract.go, modify the overflow judgment condition for function add()
+[33m2f11c44[m chore(docs): fix discord link (#1044)
+[33m5df2404[m Nominate Tatsuya Sato as fabric-samples maintainer
+[33m4691478[m Update package.json
+[33m3d747bd[m Update package.json
+[33m8f62557[m chaincode-typescript
+[33m5c020f2[m Update FSAT to use Fabric 2.5 by default
+[33mf8f52ca[m test-network-k8s: Update k8s CC builder to 0.11.0
+[33m57127ac[m Update test-network-k8s to Fabric v2.5
+[33me93cfac[m Use Java gRPC instead of Netty API to establish TLS connections
+[33m84f9ba1[m Update CI to Fabric v2.5.1 (#1032)
+[33me1d0775[m Bump CouchDB to 3.3.2 (#1028)
+[33m9a382c8[m Add test-network org3 affilication (#1026)
+[33m628331d[m Fix error in full-stack-asset-transfer-guide docs
+[33m74c48ec[m Fix DOKS section
+[33m3eaabe7[m Fix build failure in full-stack-asset-transfer
