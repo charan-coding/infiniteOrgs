@@ -46,11 +46,57 @@ class HYPER extends Contract {
         value.status = "EMPTY";
         value.creatorOrg = creatorOrg;  
         value.creatorUserId = creatorUserId;  
+        value.modules=[];
         value.signatures = [];
 
         await ctx.stub.putState(key, Buffer.from(JSON.stringify(value)));
 
         return JSON.stringify(value);
+    }
+
+    async addModulesToContract(ctx, contractId, modules) {
+        const contractAsBytes = await ctx.stub.getState(contractId);
+        if (!contractAsBytes || contractAsBytes.length === 0) {
+            throw new Error(`The contract with ID ${contractId} does not exist`);
+        }
+
+        const contract = JSON.parse(contractAsBytes.toString());
+
+
+        const callerOrg = ctx.clientIdentity.getMSPID();
+        const callerUserId = ctx.clientIdentity.getID();
+        if (contract.creatorOrg !== callerOrg || contract.creatorUserId !== callerUserId) {
+            throw new Error(`Only the creator of the contract with ID ${contractId} can add modules`);
+        }
+
+
+        const newModules = JSON.parse(modules);
+
+        const existingModuleNames = contract.modules.map(module => module.module);
+        const modulesToAdd = newModules.filter(module => !existingModuleNames.includes(module.module));
+
+        if (modulesToAdd.length === 0) {
+            throw new Error(`All selected modules are already part of the contract with ID ${contractId}`);
+        }
+
+        contract.modules.push(...modulesToAdd);
+
+
+        await ctx.stub.putState(contractId, Buffer.from(JSON.stringify(contract)));
+
+        return JSON.stringify(contract);
+    }
+
+
+   
+    async getExistingModules(ctx, contractId) {
+        const contractAsBytes = await ctx.stub.getState(contractId);
+        if (!contractAsBytes || contractAsBytes.length === 0) {
+            throw new Error(`The contract with ID ${contractId} does not exist`);
+        }
+
+        const contract = JSON.parse(contractAsBytes.toString());
+        return JSON.stringify(contract.modules);
     }
 
     async signContract(ctx, key) {
