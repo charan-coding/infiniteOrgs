@@ -62,32 +62,94 @@ class HYPER extends Contract {
 
         const contract = JSON.parse(contractAsBytes.toString());
 
-
+        // Ensure only the creator can add modules
         const callerOrg = ctx.clientIdentity.getMSPID();
         const callerUserId = ctx.clientIdentity.getID();
         if (contract.creatorOrg !== callerOrg || contract.creatorUserId !== callerUserId) {
-            throw new Error(`Only the creator of the contract with ID ${contractId} can add modules`);
+            throw new Error(`Only the creator of contract ${contractId} can add modules`);
+        }
+
+        // Parse modules JSON
+        let newModules;
+        try {
+            newModules = JSON.parse(modules);
+        } catch (error) {
+            throw new Error(`Invalid modules JSON format: ${error.message}`);
+        }
+
+        // Validate and add each module
+        let addedModules = [];
+        let duplicateModules = [];
+
+        for (const mod of newModules) {
+            if (!mod.title) {
+                throw new Error('Each module must have a title.');
+            }
+
+            // Check for duplicate module title
+            if (contract.modules.some(existing => existing.title === mod.title)) {
+                duplicateModules.push(mod.title);
+            } 
+            else if(!mod.title) {
+                contract.modules.push({
+                    title: mod.title,
+                });
+                addedModules.push(mod);y
+            }
+            else {
+                contract.modules.push({
+                    title: mod.title,
+                    ...mod.variable 
+                });
+                addedModules.push(mod);
+            }
+        }
+
+        // If no new modules were added, throw an error
+        if (addedModules.length === 0) {
+            throw new Error(`All selected modules already exist: ${duplicateModules.join(', ')}`);
         }
 
 
-        const newModules = JSON.parse(modules);
-
-        const existingModuleNames = contract.modules.map(module => module.module);
-        const modulesToAdd = newModules.filter(module => !existingModuleNames.includes(module.module));
-
-        if (modulesToAdd.length === 0) {
-            throw new Error(`All selected modules are already part of the contract with ID ${contractId}`);
-        }
-
-        contract.modules.push(...modulesToAdd);
-
-
+        // Update contract in the ledger
         await ctx.stub.putState(contractId, Buffer.from(JSON.stringify(contract)));
 
         return JSON.stringify(contract);
     }
 
 
+    async addCustomModule(ctx, contractId, title, content) {
+        const contractAsBytes = await ctx.stub.getState(contractId);
+        if (!contractAsBytes || contractAsBytes.length === 0) {
+            throw new Error(`The contract with ID ${contractId} does not exist`);
+        }
+
+        const contract = JSON.parse(contractAsBytes.toString());
+
+
+        const callerOrg = ctx.clientIdentity.getMSPID();
+        const callerUserId = ctx.clientIdentity.getID();
+        if (contract.creatorOrg !== callerOrg || contract.creatorUserId !== callerUserId) {
+            throw new Error(`Only the creator of contract ${contractId} can add modules`);
+        }
+
+        const existingModuleTitles = contract.modules.map(module => module.title);
+        if (existingModuleTitles.includes(title)) {
+            throw new Error(`Module "${title}" already exists in contract ${contractId}`);
+        }
+
+        const newModule = {
+            title: title,
+            content: content,
+            created_at: new Date().toISOString().slice(0, 19) + 'Z'
+        };
+        contract.modules.push(newModule);
+
+        // Update contract state
+        await ctx.stub.putState(contractId, Buffer.from(JSON.stringify(contract)));
+
+        return JSON.stringify(contract);
+    }
    
     async getExistingModules(ctx, contractId) {
         const contractAsBytes = await ctx.stub.getState(contractId);
