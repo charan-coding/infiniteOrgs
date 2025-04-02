@@ -34,25 +34,51 @@ router.post('/', async (req, res) => {
          const { contractId, modules } = req.body;
 
         // Validate input
-        if (!contractId || !modules || !Array.isArray(modules) || modules.length === 0) {
-            return res.status(400).json({ error: 'Contract ID and an array of modules are required.' });
+        if (!contractId || !modules) {
+            return res.status(400).json({ error: 'Contract ID and modules are required.' });
         }
 
-        // Convert modules array to JSON string
-        const modulesJSON = JSON.stringify(modules);
+        let str=JSON.stringify(contractId)
+        str=str.slice(1,str.length-1)
 
-        // Submit the transaction to add the modules to the contract
-        await contract.submitTransaction('addModulesToContract', contractId, modulesJSON);
+
+        const result1 = await contract.evaluateTransaction('queryByID', str);
+        out=JSON.parse(result1.toString())
+        out=out[0]
+
+
+        // out is a JSON that is the Json I want to check with 
+        // modules is the input JSON that i get form the API
+        //  newModules is the filtered version
+
+        let newModules = out.value.modules;
+        for (let key in modules) {
+            if (!out.value.modules || !(key in out.value.modules)) {
+                newModules[key] = modules[key];
+            }
+        }
+        
+        // Convert the filtered modules object to JSON.
+        let modulesJSON = JSON.stringify(newModules);
+        console.log(modulesJSON)
+    
+
+        const result = await contract.submitTransaction('addModulesToContract', contractId, modulesJSON);
+
         console.log(`Modules added successfully to contract ${contractId}`);
 
         // Disconnect from the gateway
         await gateway.disconnect();
+        out1=JSON.parse(result.toString())
 
-        res.json({
-            message: 'Modules added successfully to the contract.',
-            contractId: contractId,
-            addedModules: modules
-        });
+
+        if(!out1){
+        res.json({ error: 'Contract doesnt exist' });
+        }
+        else{
+        res.json({ result:out1});
+    }
+
     } catch (error) {
         console.error(`Failed to add modules to the contract: ${error}`);
         res.status(500).json({ error: 'Failed to add modules to the contract', details: error.message });
