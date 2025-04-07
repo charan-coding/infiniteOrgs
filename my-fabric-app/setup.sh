@@ -105,8 +105,8 @@ echo -e "${PURPLE}Running enrollAdmin.js...${NC}"
 node enrollAdmin.js
 
 # Step 5: Run registerUser.js
-echo -e "${PURPLE}Running registerUser.js...${NC}"
-node registerUser.js
+# echo -e "${PURPLE}Running registerUser.js...${NC}"
+# node registerUser.js
 
 # Step 6: Run enrollAdmin_org2.js
 echo -e "${PURPLE}Running enrollAdmin_org2.js...${NC}"

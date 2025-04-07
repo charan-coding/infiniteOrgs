@@ -8,6 +8,9 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
 
+const registerUserRouter = require('./registerAny');
+app.use('/api/registerUser', registerUserRouter);
+
 const createEmptyContract_org1Router = require('./src/routes/createEmptyContract_org1');
 app.use('/api/createEmptyContract_org1', createEmptyContract_org1Router);
 
@@ -25,6 +28,9 @@ app.use('/api/signContractOrg2', signContractOrg2Router);
 
 const signContractOrg3Router = require('./src/routes/signContract_org3');
 app.use('/api/signContractOrg3', signContractOrg3Router);
+
+const signContractUser2Org3Router = require('./src/routes/signContract_user2org3');
+app.use('/api/signContractUser2Org3', signContractUser2Org3Router);
 
 
 const getContract_org1Router = require('./src/routes/getContract_org1');

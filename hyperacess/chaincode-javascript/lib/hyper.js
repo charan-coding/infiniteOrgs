@@ -136,20 +136,27 @@ class HYPER extends Contract {
         }
 
         const contract = JSON.parse(contractAsBytes.toString());
-
+        const signerID = ctx.clientIdentity.getAttributeValue('hf.EnrollmentID');
 
         const signerMSP = ctx.clientIdentity.getMSPID();
 
-        if (!contract.requiredSignersMSP.includes(signerMSP)) {
-            throw new Error(`Your organization (${signerMSP}) is not required to sign this contract`);
+        if (!(contract.requiredSignersMSP.includes(signerID) ||
+        contract.requiredSignersMSP.includes(signerMSP))) 
+        {
+            throw new Error(`Signer ${signerID} from ${signerMSP} is not authorized to sign this contract`);
         }
 
-        if (contract.signatures.includes(signerMSP)) {
-            throw new Error(`Your organization (${signerMSP}) has already signed this contract`);
+        const hasAlreadySigned = contract.signatures.some(sig =>
+            sig.id === signerID || sig.msp === signerMSP
+        );
+    
+        if (hasAlreadySigned) {
+            throw new Error(`A user from ${signerMSP} or ${signerID} has already signed this contract`);
         }
-
-        contract.signatures.push(signerMSP);
-
+    
+        // Add new signature
+        contract.signatures.push({ id: signerID, msp: signerMSP });
+    
         if (contract.signatures.length === contract.requiredSignersMSP.length) {
             contract.status = "SIGNED";  
         }
