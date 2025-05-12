@@ -46,21 +46,22 @@ router.post('/', async (req, res) => {
         out=JSON.parse(result1.toString())
         out=out[0]
 
-
-        // out is a JSON that is the Json I want to check with 
-        // modules is the input JSON that i get form the API
-        //  newModules is the filtered version
-
+        console.log(modules);
+        if (!out.value.modules){
+            out.value.modules={}
+        }
+        console.log(out)
         let newModules = out.value.modules;
         for (let key in modules) {
-            if (!out.value.modules || !(key in out.value.modules)) {
+            console.log(!(key in out.value.modules))
+            if (!(key in out.value.modules)) {
                 newModules[key] = modules[key];
             }
         }
-        
+        console.log(newModules)
         // Convert the filtered modules object to JSON.
         let modulesJSON = JSON.stringify(newModules);
-        console.log(modulesJSON)
+        
     
 
         const result = await contract.submitTransaction('addModulesToContract', contractId, modulesJSON);

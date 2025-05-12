@@ -29,8 +29,7 @@ app.use('/api/signContractOrg2', signContractOrg2Router);
 const signContractOrg3Router = require('./src/routes/signContract_org3');
 app.use('/api/signContractOrg3', signContractOrg3Router);
 
-const signContractUser2Org3Router = require('./src/routes/signContract_user2org3');
-app.use('/api/signContractUser2Org3', signContractUser2Org3Router);
+
 
 
 const getContract_org1Router = require('./src/routes/getContract_org1');
@@ -73,8 +72,11 @@ app.use('/api/addModule_org3', addModule_org3Router);
 const addModule_org4Router = require('./src/routes/addModule_org4');
 app.use('/api/addModule_org4', addModule_org4Router);
 
-const addModule_org5Router = require('./src/routes/addModule_org5');
-app.use('/api/addModule_org5', addModule_org5Router);
+const addAnyModuleRouter = require('./src/routes/addAnyModule');
+app.use('/api/addAnyModule', addAnyModuleRouter);
+
+const addOrgRouter = require('./src/routes/addOrg');
+app.use('/api/addOrg', addOrgRouter);
 
 app.listen(port, () => {
   console.log(`Server running at http://localhost:${port}`);

@@ -46,7 +46,7 @@ class HYPER extends Contract {
         value.status = "EMPTY";
         value.creatorOrg = creatorOrg;  
         value.creatorUserId = creatorUserId;  
-        value.modules=[];
+        value.modules={};
         value.signatures = [];
 
         await ctx.stub.putState(key, Buffer.from(JSON.stringify(value)));

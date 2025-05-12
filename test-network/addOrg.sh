@@ -78,3 +78,67 @@ EOL
 
 # Provide feedback to the user
 echo "Generated environment variables file for ${ORG_NAME}: ${OUTPUT_FILE}"
+
+
+##############################
+# PART 4: Update only Endorsement rules in peer orgs (Org<number>) across configtx.yaml files
+##############################
+
+CONFIGTX_ROOT="/home/charan/Desktop/Fourth_Replicate/infinite_org/test-network"
+NEW_MSP="'${ORG_NAME_CAPITALIZED}MSP.peer'"
+
+update_endorsement_rule_strict() {
+  local file="$1"
+  local msp="$2"
+
+  awk -v newmsp="$msp" '
+    BEGIN {
+      in_org = 0
+      in_endorsement = 0
+    }
+    {
+      # Start of a peer Org block like - &Org1, - &Org25
+      if ($0 ~ /^[[:space:]]*-[[:space:]]*&Org[0-9]+[[:space:]]*$/) {
+        in_org = 1
+        in_endorsement = 0
+      }
+      # End of Org block if another anchor starts
+      else if (in_org && $0 ~ /^[[:space:]]*-[[:space:]]*&/) {
+        in_org = 0
+        in_endorsement = 0
+      }
+
+      # Inside Org block, detect Endorsement section
+      if (in_org && $0 ~ /^[[:space:]]*Endorsement:[[:space:]]*$/) {
+        in_endorsement = 1
+      }
+      # Exit Endorsement section if next non-indented or unrelated section appears
+      else if (in_endorsement && $0 !~ /^[[:space:]]+/) {
+        in_endorsement = 0
+      }
+
+      # Modify only Endorsement.Rule line if MSP not already present
+      if (in_org && in_endorsement && $0 ~ /^[[:space:]]*Rule:[[:space:]]*"OR\(.*\)"/ && $0 !~ newmsp) {
+        sub(/\)"/, "," newmsp ")\"")
+      }
+
+      print
+    }
+  ' "$file" > "${file}.tmp" && mv "${file}.tmp" "$file"
+}
+
+echo "Scanning configtx.yaml files to patch only peer orgs with numbered names..."
+
+find "$CONFIGTX_ROOT" -type f -name configtx.yaml | while read -r configtx; do
+  echo "Updating: $configtx"
+  update_endorsement_rule_strict "$configtx" "$NEW_MSP"
+done
+
+# Optional: handle main configtx.yaml directly
+MAIN_CONFIGTX="${CONFIGTX_ROOT}/configtx/configtx.yaml"
+if [ -f "$MAIN_CONFIGTX" ]; then
+  echo "Updating main configtx.yaml: $MAIN_CONFIGTX"
+  update_endorsement_rule_strict "$MAIN_CONFIGTX" "$NEW_MSP"
+fi
+
+echo "All peer org Endorsement rules updated with ${NEW_MSP}."

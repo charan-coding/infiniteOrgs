@@ -60,7 +60,7 @@ Organizations:
         Rule: "OR('Org1MSP.admin')"
       Endorsement:
         Type: Signature
-        Rule: "OR('Org1MSP.peer','Org2MSP.peer','Org3MSP.peer','Org4MSP.peer','Org5MSP.peer')"
+        Rule: "OR('Org1MSP.peer','Org2MSP.peer','Org3MSP.peer','Org4MSP.peer','Org5MSP.peer','Org6MSP.peer')"
   - &Org2
     # DefaultOrg defines the organization which is used in the sampleconfig
     # of the fabric.git development environment
@@ -83,7 +83,7 @@ Organizations:
         Rule: "OR('Org2MSP.admin')"
       Endorsement:
         Type: Signature
-        Rule: "OR('Org1MSP.peer','Org2MSP.peer','Org3MSP.peer','Org4MSP.peer','Org5MSP.peer')"
+        Rule: "OR('Org1MSP.peer','Org2MSP.peer','Org3MSP.peer','Org4MSP.peer','Org5MSP.peer','Org6MSP.peer')"
 ################################################################################
 #
 #   SECTION: Capabilities

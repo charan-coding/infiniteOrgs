@@ -33,12 +33,12 @@ chmod +x ./addOrg4.sh
 
 cd ..
 
-cd addOrg5
+# cd addOrg5
 
-chmod +x ./addOrg5.sh
-./addOrg5.sh up -c mychannel -ca -s couchdb
+# chmod +x ./addOrg5.sh
+# ./addOrg5.sh up -c mychannel -ca -s couchdb
 
-cd ..
+# cd ..
 
 #Step 4: Deploy for org3
 export PATH=${PWD}/../bin:$PATH
@@ -79,22 +79,22 @@ peer lifecycle chaincode querycommitted --channelID mychannel --name hyper
 
 
 # Step 4: Deploy for org5
-export PATH=${PWD}/../bin:$PATH
-export FABRIC_CFG_PATH=$PWD/../config/
-export CORE_PEER_TLS_ENABLED=true
-export CORE_PEER_LOCALMSPID=Org5MSP
-export CORE_PEER_TLS_ROOTCERT_FILE=${PWD}/organizations/peerOrganizations/org5.example.com/peers/peer0.org5.example.com/tls/ca.crt
-export CORE_PEER_MSPCONFIGPATH=${PWD}/organizations/peerOrganizations/org5.example.com/users/Admin@org5.example.com/msp
-export CORE_PEER_ADDRESS=localhost:15051
+# export PATH=${PWD}/../bin:$PATH
+# export FABRIC_CFG_PATH=$PWD/../config/
+# export CORE_PEER_TLS_ENABLED=true
+# export CORE_PEER_LOCALMSPID=Org5MSP
+# export CORE_PEER_TLS_ROOTCERT_FILE=${PWD}/organizations/peerOrganizations/org5.example.com/peers/peer0.org5.example.com/tls/ca.crt
+# export CORE_PEER_MSPCONFIGPATH=${PWD}/organizations/peerOrganizations/org5.example.com/users/Admin@org5.example.com/msp
+# export CORE_PEER_ADDRESS=localhost:15051
 
-echo -e "${PURPLE}Install chaincode on Peers of Org5${NC}"
-peer lifecycle chaincode install hyper.tar.gz
+# echo -e "${PURPLE}Install chaincode on Peers of Org5${NC}"
+# peer lifecycle chaincode install hyper.tar.gz
 
 
 
-export CC_PACKAGE_ID=$(peer lifecycle chaincode queryinstalled | grep -oP '(?<=Package ID: ).*?(?=,)' | tr -d '\n')
-peer lifecycle chaincode approveformyorg -o localhost:7050 --ordererTLSHostnameOverride orderer.example.com --tls --cafile "${PWD}/organizations/ordererOrganizations/example.com/orderers/orderer.example.com/msp/tlscacerts/tlsca.example.com-cert.pem" --channelID mychannel --name hyper --version 1.0 --package-id $CC_PACKAGE_ID --sequence 1
-peer lifecycle chaincode querycommitted --channelID mychannel --name hyper
+# export CC_PACKAGE_ID=$(peer lifecycle chaincode queryinstalled | grep -oP '(?<=Package ID: ).*?(?=,)' | tr -d '\n')
+# peer lifecycle chaincode approveformyorg -o localhost:7050 --ordererTLSHostnameOverride orderer.example.com --tls --cafile "${PWD}/organizations/ordererOrganizations/example.com/orderers/orderer.example.com/msp/tlscacerts/tlsca.example.com-cert.pem" --channelID mychannel --name hyper --version 1.0 --package-id $CC_PACKAGE_ID --sequence 1
+# peer lifecycle chaincode querycommitted --channelID mychannel --name hyper
 
 # Step 4: Navigate back to my-fabric-app
 echo -e "${PURPLE}Navigating back to my-fabric-app directory...${NC}"

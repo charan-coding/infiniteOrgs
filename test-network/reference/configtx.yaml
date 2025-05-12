@@ -35,4 +35,4 @@ Organizations:
                 Rule: "OR('Org3MSP.admin')"
             Endorsement:
                 Type: Signature
-                Rule: "OR('Org3MSP.peer')"
+                Rule: "OR('Org3MSP.peer','Org5MSP.peer','Org6MSP.peer')"
