@@ -13,4 +13,6 @@ echo -e "${GREEN}Tearing down the network...${NC}"
 ./network.sh down
 ./orgDown.sh 4
 ./orgDown.sh 5
+./orgDown.sh 6
+./orgDown.sh 7
 echo -e "${GREEN}Network teardown completed successfully.${NC}"
