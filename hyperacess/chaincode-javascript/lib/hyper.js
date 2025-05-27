@@ -91,32 +91,25 @@ class HYPER extends Contract {
 
     
    
-    async addCommentsToModule(ctx, contractId, title, comment) {
+    async addCommentToModule(ctx, contractId, moduleName, comment) {
         const contractAsBytes = await ctx.stub.getState(contractId);
         if (!contractAsBytes || contractAsBytes.length === 0) {
             throw new Error(`The contract with ID ${contractId} does not exist`);
         }
 
+        
         const contract = JSON.parse(contractAsBytes.toString());
 
-
-        const callerOrg = ctx.clientIdentity.getMSPID();
-        const callerUserId = ctx.clientIdentity.getID();
-
-        const existingModuleTitles = contract.modules.map(module => module.title);
-        if (!existingModuleTitles.includes(title)) {
-            throw new Error(`Module "${title}" does not exist in contract ${contractId}`);
+        if (!contract|| !contract.modules || !contract.modules[moduleName]) {
+            throw new Error(`Module ${moduleName} does not exist in contract ${contractId}`);
         }
-        
 
+        contract.modules[moduleName].comment = comment;
 
-        contract.modules.push(newModule);
-
-        // Update contract state
         await ctx.stub.putState(contractId, Buffer.from(JSON.stringify(contract)));
-
-        return JSON.stringify(contract);
+        return JSON.stringify({ status: 'success', contractId, module: moduleName });
     }
+
 
 
     async getExistingModules(ctx, contractId) {
