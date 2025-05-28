@@ -104,7 +104,16 @@ class HYPER extends Contract {
             throw new Error(`Module ${moduleName} does not exist in contract ${contractId}`);
         }
 
-        contract.modules[moduleName].comment = comment;
+        const commenterID = ctx.clientIdentity.getAttributeValue('hf.EnrollmentID');
+        const commenterMSP = ctx.clientIdentity.getMSPID();
+        const author= {
+                        AddedBy: commenterID,
+                        Org: commenterMSP
+                    };
+         if (!contract.modules[moduleName].comment) {
+            contract.modules[moduleName].comment= {};
+        }
+        contract.modules[moduleName].comment[comment] = author;
 
         await ctx.stub.putState(contractId, Buffer.from(JSON.stringify(contract)));
         return JSON.stringify({ status: 'success', contractId, module: moduleName });
@@ -122,41 +131,76 @@ class HYPER extends Contract {
         return JSON.stringify(contract.modules);
     }
 
-    async signContract(ctx, key) {
-        const contractAsBytes = await ctx.stub.getState(key);
-        if (!contractAsBytes || contractAsBytes.length === 0) {
-            throw new Error(`The contract with key ${key} does not exist`);
-        }
-
-        const contract = JSON.parse(contractAsBytes.toString());
-        const signerID = ctx.clientIdentity.getAttributeValue('hf.EnrollmentID');
-
-        const signerMSP = ctx.clientIdentity.getMSPID();
-
-        if (!(contract.requiredSignersMSP.includes(signerID) ||
-        contract.requiredSignersMSP.includes(signerMSP))) 
-        {
-            throw new Error(`Signer ${signerID} from ${signerMSP} is not authorized to sign this contract`);
-        }
-
-        const hasAlreadySigned = contract.signatures.some(sig =>
-            sig.id === signerID || sig.msp === signerMSP
-        );
-    
-        if (hasAlreadySigned) {
-            throw new Error(`A user from ${signerMSP} or ${signerID} has already signed this contract`);
-        }
-    
-        // Add new signature
-        contract.signatures.push({ id: signerID, msp: signerMSP });
-    
-        if (contract.signatures.length === contract.requiredSignersMSP.length) {
-            contract.status = "SIGNED";  
-        }
-        await ctx.stub.putState(key, Buffer.from(JSON.stringify(contract)));
-
-        return JSON.stringify(contract);
+async signContract(ctx, key) {
+    const contractAsBytes = await ctx.stub.getState(key);
+    if (!contractAsBytes || contractAsBytes.length === 0) {
+        throw new Error(`The contract with key ${key} does not exist`);
     }
+
+    const contract = JSON.parse(contractAsBytes.toString());
+    const signerID = ctx.clientIdentity.getAttributeValue('hf.EnrollmentID');
+    const signerMSP = ctx.clientIdentity.getMSPID();
+
+    const required = contract.requiredSignersMSP;
+    const previousSignatures = contract.signatures || [];
+    // Filter Based on MSP tag
+    const specificUsers = required.filter(entry => !entry.endsWith("MSP"));
+    const requiredMSPs = required.filter(entry => entry.endsWith("MSP"));
+
+    const isSpecificUser = specificUsers.includes(signerID);
+    const isOrgRequired = requiredMSPs.includes(signerMSP);
+
+    if (!isSpecificUser && !isOrgRequired) {
+        throw new Error(`Signer ${signerID} from ${signerMSP} is not authorized to sign this contract`);
+    }
+
+    const hasAlreadySignedID = previousSignatures.some(sig => sig.id === signerID);
+    if (hasAlreadySignedID) {
+        throw new Error(`User ${signerID} has already signed this contract`);
+    }
+
+    const orgAlreadySignedByOthers = previousSignatures.some(sig =>
+        sig.msp === signerMSP && sig.id !== signerID && !specificUsers.includes(sig.id)
+    );
+
+    const specificUserAlreadySigned = previousSignatures.some(sig => specificUsers.includes(sig.id));
+
+    // Decision logic
+    if (isSpecificUser) {
+        // Specific user can sign even if someone else from their org already signed
+        // BUT the other user cannot sign after Sepcific user already did
+    } else if (isOrgRequired) {
+        // Only allow someone from org to sign if:
+        // - nobody from org has signed yet
+        // - and the specific user from that org hasn't signed
+        if (orgAlreadySignedByOthers || specificUserAlreadySigned) {
+            throw new Error(`A user from ${signerMSP} has already signed (or the specific user has signed)`);
+        }
+    }
+
+    // Add signature
+    contract.signatures.push({ id: signerID, msp: signerMSP });
+
+    // Check if signing is complete
+    const signedEntities = new Set();
+    for (const sig of contract.signatures) {
+        if (specificUsers.includes(sig.id)) {
+            signedEntities.add(sig.id);
+            signedEntities.add(sig.msp); // Covers org too if specific user signed
+        } else if (requiredMSPs.includes(sig.msp)) {
+            signedEntities.add(sig.msp);
+        }
+    }
+
+    if (required.every(req => signedEntities.has(req))) {
+        contract.status = "SIGNED";
+    }
+
+    await ctx.stub.putState(key, Buffer.from(JSON.stringify(contract)));
+    return JSON.stringify(contract);
+}
+
+
 
     
 
