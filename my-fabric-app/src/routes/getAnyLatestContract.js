@@ -1,22 +1,20 @@
 const path = require('path');
+const { Gateway, Wallets } = require('fabric-network');
 const fs = require('fs');
 const express = require('express');
-const { Gateway, Wallets } = require('fabric-network');
-
 const router = express.Router();
 
 router.post('/', async (req, res) => {
-    const { contractId, moduleName, newContent, userIdentity } = req.body;
+    const { userIdentity, contractId } = req.body;
 
-    if (!contractId || !moduleName || !newContent || !userIdentity) {
-        return res.status(400).json({
-            error: 'contractId, moduleName, newContent, and userIdentity are required.'
-        });
+    if (!userIdentity || !contractId) {
+        return res.status(400).json({ error: 'userIdentity and contractId are required.' });
     }
 
     try {
         const mspId = userIdentity.mspId;
         const orgId = mspId.replace('MSP', '').toLowerCase();
+
         const ccpPath = path.resolve(
             __dirname,
             '..',
@@ -52,21 +50,38 @@ router.post('/', async (req, res) => {
         const network = await gateway.getNetwork('mychannel');
         const contract = network.getContract('hyper');
 
-        const result = await contract.submitTransaction(
-            'editModuleContent',
-            contractId,
-            moduleName,
-            newContent
-        );
+        const str = JSON.stringify(contractId).slice(1, -1); // remove quotes
+        const result = await contract.evaluateTransaction('queryByID', str);
+        const parsedResult = JSON.parse(result.toString());
+
+        if (!parsedResult || parsedResult.length === 0) {
+            return res.status(404).json({ error: 'Contract not found' });
+        }
+
+        const fullContract = parsedResult[0];
+
+        // Transform modules to include only latest version
+        if (fullContract.value && fullContract.value.modules) {
+    for (const [moduleName, versions] of Object.entries(fullContract.value.modules)) {
+        const versionKeys = Object.keys(versions).filter(v => /^V\d+$/.test(v));
+        const latest = versionKeys
+            .map(v => ({ key: v, num: parseInt(v.slice(1)) }))
+            .sort((a, b) => b.num - a.num)[0];
+
+        // Replace with only the latest version
+        fullContract.value.modules[moduleName] = {
+            ...versions[latest.key]  // flattening Vn
+        };
+    }
+}
 
         await gateway.disconnect();
-
-        res.json({ result: JSON.parse(result.toString()) });
+        return res.json({ result: fullContract });
 
     } catch (error) {
-        console.error(`Failed to edit module: ${error}`);
+        console.error(`Failed to evaluate transaction: ${error}`);
         res.status(500).json({
-            error: 'Failed to edit module in the contract',
+            error: 'Failed to evaluate transaction',
             details: error.message
         });
     }

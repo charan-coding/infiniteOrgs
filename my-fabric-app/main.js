@@ -72,6 +72,9 @@ app.use('/api/addModule_org3', addModule_org3Router);
 const addModule_org4Router = require('./src/routes/addModule_org4');
 app.use('/api/addModule_org4', addModule_org4Router);
 
+const editAnyModuleRouter = require('./src/routes/editAnyModule');
+app.use('/api/editAnyModule', editAnyModuleRouter);
+
 const addAnyModuleRouter = require('./src/routes/addAnyModule');
 app.use('/api/addAnyModule', addAnyModuleRouter);
 
@@ -89,6 +92,12 @@ app.use('/api/addOrg', addOrgRouter);
 
 const setupOrgRouter = require('./src/routes/setupOrg');
 app.use('/api/setupOrg', setupOrgRouter);
+
+const getAnyContractRouter = require('./src/routes/getAnyContract');
+app.use('/api/getAnyContract', getAnyContractRouter);
+
+const getAnyLatestContractRouter = require('./src/routes/getAnyLatestContract');
+app.use('/api/getAnyLatestContract', getAnyLatestContractRouter);
 
 app.listen(port, () => {
   console.log(`Server running at http://localhost:${port}`);
